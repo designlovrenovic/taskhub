@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TaskHub — Where projects get simplified</title>
+  <meta name="description" content="TaskHub keeps your team connected: timelines, boards, docs and integrations in one place.">
+  <meta name="theme-color" content="#0F1020">
+  <meta property="og:title" content="TaskHub — Where projects get simplified">
+  <meta property="og:description" content="Stay connected, accomplish more - no matter the distance.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link id="page-css" rel="stylesheet" href="">
+  <style>
+    html,body{margin:0;background:#0F1020}
+    #app{min-height:100vh}
+    .boot #app{opacity:0}
+    #app{transition:opacity .25s ease}
+  </style>
+  <noscript><style>.boot #app{opacity:1}</style></noscript>
+</head>
+<body class="boot">
+  <div id="app"></div>
+  <noscript><p style="color:#F3F4F8;font-family:sans-serif;text-align:center;padding:40px">TaskHub needs JavaScript enabled to show this page.</p></noscript>
+
+  <script src="assets/js/dc-runtime.js"></script>
+  <script src="assets/js/desktop.js"></script>
+  <script src="assets/js/mobile.js"></script>
+  <script>
+    (function () {
+      var app = document.getElementById('app');
+      var css = document.getElementById('page-css');
+      var mq = window.matchMedia('(max-width: 760px)');
+      var current = null, handle = null;
+      function show(which) {
+        if (which === current) return;
+        current = which;
+        if (handle) handle.unmount();
+        document.body.classList.add('boot');
+        var page = window.TH_PAGES[which];
+        var start = function () {
+          handle = window.DCRuntime.mount(page.define(window.DCLogic), page.template, app, {});
+          requestAnimationFrame(function () { document.body.classList.remove('boot'); });
+        };
+        css.onload = start;
+        css.onerror = start;
+        css.href = 'assets/css/' + which + '.css';
+      }
+      show(mq.matches ? 'mobile' : 'desktop');
+      var onChange = function () { show(mq.matches ? 'mobile' : 'desktop'); };
+      if (mq.addEventListener) mq.addEventListener('change', onChange); else mq.addListener(onChange);
+    })();
+  </script>
+</body>
+</html>
